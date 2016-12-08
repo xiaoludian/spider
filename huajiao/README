@@ -1,0 +1,7 @@
+Usage: python3 huajiao.py [db|file]
+
+如果选择db 会把爬取的数据存到mysql数据库中
+如果选择file 会把爬取的数据存到当前目录下的excel表中
+
+注意:
+花椒主播名可能有emoji表情 所以数据库表要选用utf8mb4编码 支持utf8mb4编码的MySQL最低为5.5.3版本
