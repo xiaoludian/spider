@@ -1,0 +1,22 @@
+终端实时获取股票价格
+
+支持命令行多参数，如果需要帮助：
+    python stock_terminal.py -h
+设置线程数（默认1）（如果有需要）   -n
+设置查询时间间隔（默认3秒）   -t   
+
+
+如果查询 智慧农业 sz000816
+例如:
+    python stock_terminal.py sz000816 
+
+支持查询多个股票
+例如:
+    python stock_terminal.py sh601003,sz000816,sz000778 -n 2 -t 3
+
+
+通过调用新浪股票API，实时查询股票价格 详见 http://blog.csdn.net/simon803/article/details/7784682
+支持查询多支股票，通过threading多线程同时查询结果
+通过queue实现线程池
+requests请求接口
+argparse实现命令行参数处理
