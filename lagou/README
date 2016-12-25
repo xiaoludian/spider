@@ -1,0 +1,13 @@
+修改lagou.py 要爬取的职位
+Usage: python3 lagou.py 
+
+注意requests的请求必须要带cookies
+字典里面这四个参数一定要有
+cookies = {'PRE_LAND': 'https://www.lagou.com',
+           'index_location_city': urllib.parse.quote(city),
+           'user_trace_token': '20161204103620-1d8f224d10f4408da2a9eb1103b8433c',
+           'LGUID': '20161204103620-70c9a0ff-b9ca-11e6-b029-525400f775ce'
+           }
+           
+其中user_trace_token和LGUID不知道是根据什么算法得到的，所幸每次请求这两个值都不变
+还有一个需要注意的是requests带cookie不能有中文
