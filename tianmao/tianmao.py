@@ -35,11 +35,15 @@ class DownloadThread(threading.Thread):
             self.download_pic(item_id, index, pic_url) 
         
     def download_pic(self, item_id, index, pic_url): 
-        r = requests.get(pic_url, stream=True, headers=self.headers)
-        if r.status_code == 200:
-            with open("{}/{}.jpg".format(item_id, index), 'wb') as f:  
-                f.write(r.content) 
-            print('{}号线程下载完了{}的第{}张图片！'.format(self.name, item_id, index))    
+        try:
+            r = requests.get(pic_url, stream=True, headers=self.headers)
+            if r.status_code == 200:
+                with open("{}/{}.jpg".format(item_id, index), 'wb') as f:  
+                    f.write(r.content) 
+                    print('{}号线程下载完了{}的第{}张图片！'.format(self.name, item_id, index))   
+                    
+        except Exception as e:
+            pass
             
             
 class Spider():
@@ -79,10 +83,13 @@ class Spider():
                          'sort':'s'
                          }
             
-            r =requests.get('https://list.tmall.com/search_product.htm', params=page_dict, headers=headers)
-            r.encoding = 'utf-8'
-            page_content.append(r.text)
-            
+            try:
+                r =requests.get('https://list.tmall.com/search_product.htm', params=page_dict, headers=headers)
+                r.encoding = 'utf-8'
+                page_content.append(r.text)
+            except Exception as e:
+                pass
+
         return page_content
 
     def get_url_from_page(self, page_content):
@@ -123,13 +130,16 @@ class Spider():
                      'location':'',
                      'needFold':'0',
                      'callback':'json'
-                     }      
-            r = requests.get('https://rate.tmall.com/list_detail_rate.htm', params=items)
-            r.encoding = 'utf-8'       
-            # 对文本进行部分格式化修改 满足json解析需求
-            text = r.text.replace('json(', '')
-            text = text.strip()[:-1]
-            json_data = json.loads(text)
+                     }    
+            try:
+                r = requests.get('https://rate.tmall.com/list_detail_rate.htm', params=items)
+                r.encoding = 'utf-8'       
+                # 对文本进行部分格式化修改 满足json解析需求
+                text = r.text.replace('json(', '')
+                text = text.strip()[:-1]
+                json_data = json.loads(text)
+            except Exception as e:
+                return itemID, []
             
             if not ('rateDetail' in json_data and 'rateList' in json_data['rateDetail']):
                 break
@@ -176,8 +186,10 @@ class Spider():
         print('done!')
         
 if __name__ == '__main__':
-    keyword = input('请输入要查询的物品:')
-    page = input('请输入要查询的页数:')
+    #keyword = input('请输入要查询的物品:')
+    #page = input('请输入要查询的页数:')
+    keyword = '书包'
+    page = '10'
     thread_num = 10
     spider = Spider(keyword, page, thread_num)
     spider.start()
